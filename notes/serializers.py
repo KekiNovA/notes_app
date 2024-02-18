@@ -6,7 +6,7 @@ class CreateNoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Note
-        fields = ['title']
+        fields = []
 
 
 class NoteSerializer(serializers.ModelSerializer):
