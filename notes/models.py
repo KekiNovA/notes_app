@@ -13,3 +13,13 @@ class Note(models.Model):
 
     def __str__(self):
         return f"{self.created_by.get_username()}  - {self.title}"
+
+
+class NoteSharedUsers(models.Model):
+    note = models.OneToOneField(
+        Note, on_delete=models.PROTECT)
+    shared_users = models.ManyToManyField(
+        User, related_name="shared_users", blank=True)
+
+    def __str__(self):
+        return f"{self.note.title}"

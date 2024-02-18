@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import NoteSharedUsers
 
 
 class IsNoteOwner(permissions.BasePermission):
@@ -8,7 +9,9 @@ class IsNoteOwner(permissions.BasePermission):
 
 class HasNoteAccess(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        mapping = NoteSharedUsers.objects.filter(note=obj)
+        allow_user = mapping.exists() and request.user in mapping.first().shared_user.all()
         return (
             obj.created_by == request.user
-            # or request.user in obj.shared_users.all()
+            or allow_user
         )
