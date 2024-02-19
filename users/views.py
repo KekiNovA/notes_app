@@ -8,7 +8,6 @@ from rest_framework import status
 from .serializers import SignupSerializer, LoginSerializer
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from rest_framework.decorators import api_view
 
 
 User = get_user_model()
