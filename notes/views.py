@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +17,12 @@ from django.db.models import F
 User = get_user_model()
 
 
+@swagger_auto_schema(request_body=CreateNoteSerializer,
+                     responses={
+                         201: '''Note created successfully''',
+                         401: '''Unauthorized''',
+                         500: '''Internal Server Error'''
+                     })
 class CreateNoteView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CreateNoteSerializer
@@ -55,10 +63,12 @@ class GetNoteView(RetrieveUpdateAPIView):
     serializer_class = NoteSerializer
     queryset = Note.objects.all()
 
-    def get(self, request, pk):
-        print(list(NoteLine.objects.filter(
-            note__id=pk).order_by('line_number').values('line_number', 'content')))
-
+    @swagger_auto_schema(request_body=NoteSerializer,
+                         responses={
+                             201: '''Note created successfully''',
+                             401: '''Unauthorized''',
+                             500: '''Internal Server Error'''
+                         })
     def put(self, request, pk):
         try:
             note = Note.objects.get(pk=pk)
@@ -119,6 +129,19 @@ class GetNoteView(RetrieveUpdateAPIView):
 class ShareNoteView(APIView):
     permission_classes = [IsAuthenticated, IsNoteOwner]
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'usernames': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_STRING), description='string'),
+            },
+            required=['usernames']
+        ),
+        responses={
+            201: '''Note created successfully''',
+            401: '''Unauthorized''',
+            500: '''Internal Server Error'''
+        })
     def post(self, request):
         data = request.data
         note = Note.objects.get(pk=data['note_id'])
@@ -144,6 +167,12 @@ class ShareNoteView(APIView):
         return Response({"message": "Note shared successfully."}, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(request_body=NoteVersionSerilizer,
+                     responses={
+                         201: '''Note created successfully''',
+                         401: '''Unauthorized''',
+                         500: '''Internal Server Error'''
+                     })
 class NoteVersionView(ListAPIView):
     permission_classes = [IsAuthenticated, IsNoteOwner]
     serializer_class = NoteVersionSerilizer

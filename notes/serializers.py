@@ -3,10 +3,11 @@ from .models import Note, NoteLine, NoteVersion
 
 
 class CreateNoteSerializer(serializers.ModelSerializer):
+    lines = serializers.ListField(required=False)
 
     class Meta:
         model = Note
-        fields = []
+        fields = ['lines']
 
 
 class NoteLineSerializer(serializers.ModelSerializer):
@@ -18,7 +19,8 @@ class NoteLineSerializer(serializers.ModelSerializer):
 
 
 class NoteSerializer(serializers.ModelSerializer):
-    created_by = serializers.CharField(source='created_by.username')
+    created_by = serializers.CharField(
+        source='created_by.username', required=False)
     lines = NoteLineSerializer(many=True)
 
     class Meta:

@@ -1,19 +1,26 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import SignupSerializer, LogininSerializer
+from .serializers import SignupSerializer, LoginSerializer
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
 
 
 User = get_user_model()
 
 
 class SignupView(APIView):
-    permission_classes = [AllowAny]  # Allow anyone to signup
+    permission_classes = [AllowAny]
 
+    @swagger_auto_schema(request_body=SignupSerializer,
+                         responses={201: '''When user is created successfully''',
+                                    400: '''Gives Validation Error''',
+                                    500: '''Internal Server Error'''})
     def post(self, request):
         serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -29,8 +36,14 @@ class SignupView(APIView):
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(request_body=LoginSerializer,
+                         responses={201: '''When user is successfully logged in. return token''',
+                                    400: '''Gives Validation Error''',
+                                    401: '''Gives invalid username error''',
+                                    500: '''Internal Server Error'''}
+                         )
     def post(self, request):
-        serializer = LogininSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
