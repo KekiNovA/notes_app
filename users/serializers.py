@@ -34,14 +34,14 @@ class SignupSerializer(serializers.ModelSerializer):
 
 
 class LogininSerializer(serializers.Serializer):
-    login = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, attrs):
-        login = attrs['login']
+        username = attrs['username']
         password = attrs['password']
 
-        user = User.objects.filter(Q(username=login) | Q(email=login)).first()
+        user = User.objects.filter(Q(username=username)).first()
         if not user:
             raise serializers.ValidationError({"error": "Invalid credentials"})
 

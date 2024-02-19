@@ -43,7 +43,7 @@ class LoginView(APIView):
 
         except User.DoesNotExist:
             # Handle user not found (e.g., inactive account)
-            return Response({'error': 'Invalid username or email'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid username'}, status=status.HTTP_401_UNAUTHORIZED)
 
         except Exception as e:
             return Response({'error': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
