@@ -37,7 +37,7 @@ class CreateNoteView(CreateAPIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         instance = self.perform_create(serializer)
-        lines = request.data.get('lines', [])
+        lines = request.data.get('note_lines', [])
         if lines:
             current_line_number = 1
             for content in lines:
