@@ -53,3 +53,7 @@ To run tests, run the following command
 ```bash
   python manage.py test
 ```
+
+## Postman Collection
+
+https://elements.getpostman.com/redirect?entityId=33036163-2eadca7d-52ea-43af-8548-5a8ff5fc672b&entityType=collection
