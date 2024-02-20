@@ -14,6 +14,18 @@ User = get_user_model()
 
 
 class SignupView(APIView):
+    '''
+    This view is used to signup the user.
+
+    Parameters:
+    username(string): Username of the user.
+    email(string)(optional): Email of the user.
+    password(string): Password of the user.
+    password2(string): Confirm password.
+
+    Returns:
+    message: Success message.
+    '''
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(request_body=SignupSerializer,
@@ -33,6 +45,16 @@ class SignupView(APIView):
 
 
 class LoginView(APIView):
+    '''
+    This view is used to login the user.
+
+    Parameters:
+    username(string): Username of the user.
+    password(string): Password of the user.
+
+    Returns:
+    token: Auth Token of user
+    '''
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(request_body=LoginSerializer,

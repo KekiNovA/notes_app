@@ -24,6 +24,16 @@ User = get_user_model()
                          500: '''Internal Server Error'''
                      })
 class CreateNoteView(CreateAPIView):
+    '''
+    This view is used to create a new note.
+
+    Parameters:
+    note_lines (list) (optional): List of note lines.
+
+    Returns:
+    message: Success message.
+    data: Note data.
+    '''
     permission_classes = [IsAuthenticated]
     serializer_class = CreateNoteSerializer
 
@@ -59,14 +69,30 @@ class CreateNoteView(CreateAPIView):
 
 
 class GetNoteView(RetrieveUpdateAPIView):
+    '''
+    get:
+    Returns Note data.
+
+    put:
+    Updates lines in note.
+    Parameters:
+    lines(list): List of objects.
+        object:
+            line_number: Line number of the note.
+            content: Content inside the note.
+
+    Returns:
+    message: Success message.
+    '''
     permission_classes = [IsAuthenticated, HasNoteAccess]
     serializer_class = NoteSerializer
     queryset = Note.objects.all()
 
     @swagger_auto_schema(request_body=NoteSerializer,
                          responses={
-                             201: '''Note created successfully''',
+                             201: '''Success message or note data''',
                              401: '''Unauthorized''',
+                             404: '''Note not found''',
                              500: '''Internal Server Error'''
                          })
     def put(self, request, pk):
@@ -127,6 +153,16 @@ class GetNoteView(RetrieveUpdateAPIView):
 
 
 class ShareNoteView(APIView):
+    '''
+    This view is used to share note with other users.
+
+    Parameters:
+    note_id: id of the note.
+    usernames: list of valid usernames(as string)
+
+    Returns:
+    message: Success message
+    '''
     permission_classes = [IsAuthenticated, IsNoteOwner]
 
     @swagger_auto_schema(
@@ -146,7 +182,6 @@ class ShareNoteView(APIView):
         data = request.data
         note = Note.objects.get(pk=data['note_id'])
         usernames = request.data.get("usernames", [])
-        print(usernames)
         if not usernames:
             raise ValidationError(
                 {'error': 'Please provide usernames to share with.'})
@@ -169,11 +204,20 @@ class ShareNoteView(APIView):
 
 @swagger_auto_schema(request_body=NoteVersionSerilizer,
                      responses={
-                         201: '''Note created successfully''',
+                         201: '''Gives Note history''',
                          401: '''Unauthorized''',
                          500: '''Internal Server Error'''
                      })
 class NoteVersionView(ListAPIView):
+    '''
+    This view is used to show history on the notes.
+
+    Argument:
+    id: id of the note.
+
+    Returns:
+    data: Note data
+    '''
     permission_classes = [IsAuthenticated, IsNoteOwner]
     serializer_class = NoteVersionSerilizer
 
