@@ -58,3 +58,14 @@ To run tests, run the following command
 ## Postman Collection
 
 https://elements.getpostman.com/redirect?entityId=33036163-2eadca7d-52ea-43af-8548-5a8ff5fc672b&entityType=collection
+
+## Deployment
+
+Have deployed this project on http://kekinova.pythonanywhere.com/
+
+Credentials -
+
+```bash
+  username = admin
+  password = admin123
+```
