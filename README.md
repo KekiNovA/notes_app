@@ -44,7 +44,8 @@ Done now you can start the server and test the apis on localhost:8000
 
 ## Documentation
 
-For Documentation of apis you can visit localhost:8000/swagger or localhost:8000/redoc
+For Documentation of apis you can visit localhost:8000/swagger or localhost:8000/redoc.
+Have also included doctrings.
 
 ## Running Tests
 
